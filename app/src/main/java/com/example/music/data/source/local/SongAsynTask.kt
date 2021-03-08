@@ -5,14 +5,14 @@ import com.example.music.data.entity.Song
 import com.example.music.data.source.OnSongLoadedCallback
 import java.lang.Exception
 
-class GetSongAsynTask(
+class SongAsynTask(
     private val songHandler: SongHandler,
     private val callback: OnSongLoadedCallback
 ) : AsyncTask<Void, Void, MutableList<Song>>() {
     private var exception: Exception? = null
     override fun doInBackground(vararg params: Void?): MutableList<Song>? {
         return try {
-            songHandler.getSong()
+            songHandler.getSongs()
         } catch (exception: Exception) {
             this.exception = exception
             null

@@ -9,12 +9,12 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.IBinder
 
-class PlaySongService : Service() {
+class MusicService : Service() {
     private var binder = Binder()
     private var mediaPlayer = MediaPlayer()
 
     inner class Binder : android.os.Binder() {
-        fun getService(): PlaySongService = this@PlaySongService
+        fun getService(): MusicService = this@MusicService
     }
 
     override fun onCreate() {
@@ -45,6 +45,6 @@ class PlaySongService : Service() {
     }
 
     companion object {
-        fun getIntent(context: Context) = Intent(context, PlaySongService::class.java)
+        fun getIntent(context: Context) = Intent(context, MusicService::class.java)
     }
 }

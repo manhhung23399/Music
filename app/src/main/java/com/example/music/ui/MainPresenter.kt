@@ -8,13 +8,13 @@ import java.lang.Exception
 class MainPresenter(private val view: MainContract.View, private val repository: SongRepository) :
     MainContract.Presenter {
     override fun getSongList() {
-        repository.getLocalTracks(object : OnSongLoadedCallback {
+        repository.getLocalSongs(object : OnSongLoadedCallback {
             override fun onSuccess(data: MutableList<Song>) {
-                view.showListSuccess(data)
+                view.showListSongSuccess(data)
             }
 
             override fun onFail(exception: Exception) {
-                view.showListErorr(exception)
+                view.showListSongErorr(exception)
             }
         })
 

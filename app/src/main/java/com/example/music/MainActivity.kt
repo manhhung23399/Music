@@ -14,8 +14,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.music.data.entity.Song
 import com.example.music.data.repository.SongRepository
-import com.example.music.data.source.local.LocalSongDataSource
-import com.example.music.service.PlaySongService
+import com.example.music.data.source.local.SongsLocalDataSource
+import com.example.music.service.MusicService
 import com.example.music.ui.Callback
 import com.example.music.ui.MainContract
 import com.example.music.ui.MainPresenter
@@ -23,17 +23,15 @@ import com.example.music.ui.SongAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 
-
 class MainActivity : AppCompatActivity(), MainContract.View, Callback {
-    private var listSong = mutableListOf<Song>()
     private val REQUEST_CODE = 1
     private var mainPresenter: MainPresenter? = null
-    private var playSongService: PlaySongService? = null
+    private var musicService: MusicService? = null
     private var isBound = false
     private val connect: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as PlaySongService.Binder
-            playSongService = binder.getService()
+            val binder = service as MusicService.Binder
+            musicService = binder.getService()
             isBound = true
         }
 
@@ -45,7 +43,7 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
     override fun onStart() {
         super.onStart()
         if (!isBound) {
-            bindService(PlaySongService.getIntent(this), connect, Context.BIND_AUTO_CREATE)
+            bindService(MusicService.getIntent(this), connect, Context.BIND_AUTO_CREATE)
         }
     }
 
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
         setContentView(R.layout.activity_main)
         checkPremission()
         mainPresenter =
-            MainPresenter(this, SongRepository(LocalSongDataSource(this.contentResolver)))
+            MainPresenter(this, SongRepository(SongsLocalDataSource(this.contentResolver)))
         mainPresenter?.getSongList()
     }
 
@@ -86,21 +84,20 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
         }
     }
 
-    override fun showListSuccess(list: MutableList<Song>) {
-        listSong = list
-        val songAdapter = SongAdapter(listSong, this)
+    override fun showListSongSuccess(list: MutableList<Song>) {
+        val songAdapter = SongAdapter(list, this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = songAdapter
         songAdapter.notifyDataSetChanged()
     }
 
-    override fun showListErorr(exception: Exception) {
+    override fun showListSongErorr(exception: Exception) {
         Toast.makeText(this, exception.toString(), Toast.LENGTH_SHORT).show()
     }
 
     override fun onClick(id: Int) {
-        playSongService?.playMusic(id.toLong())
+        musicService?.playMusic(id.toLong())
     }
 
 
