@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
         recyclerView.adapter = songAdapter
     }
 
-    override fun showListSong(exception: Exception) {
+    override fun showError(exception: Exception) {
         Toast.makeText(this, exception.toString(), Toast.LENGTH_SHORT).show()
     }
 

@@ -9,6 +9,7 @@ class MainPresenter(
     private val view: MainContract.View,
     private val repository: SongRepository
 ) : MainContract.Presenter {
+
     override fun getSongs() {
         repository.getLocalSongs(object : OnSongLoadedCallback {
             override fun onSuccess(data: MutableList<Song>) {
@@ -16,7 +17,7 @@ class MainPresenter(
             }
 
             override fun onFail(exception: Exception) {
-                view.showListSong(exception)
+                view.showError(exception)
             }
         })
     }

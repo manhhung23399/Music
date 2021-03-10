@@ -6,7 +6,7 @@ import java.lang.Exception
 interface MainContract {
     interface View {
         fun showListSong(list: MutableList<Song>)
-        fun showListSong(exception: Exception)
+        fun showError(exception: Exception)
     }
 
     interface Presenter {

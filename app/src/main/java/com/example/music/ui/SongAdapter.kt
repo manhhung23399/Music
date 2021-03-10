@@ -10,7 +10,8 @@ import kotlinx.android.synthetic.main.row_song.view.*
 
 class SongAdapter(val callback: Callback) :
     RecyclerView.Adapter<SongAdapter.ViewHolder>() {
-    private var listSong = mutableListOf<Song>()
+
+    private val listSong = mutableListOf<Song>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.row_song, parent, false)
@@ -21,10 +22,8 @@ class SongAdapter(val callback: Callback) :
         holder.bindView(Song(listSong[position].id, listSong[position].title))
     }
 
-    override fun getItemCount(): Int {
-        return listSong.size
-    }
-    fun updateData(list:MutableList<Song>){
+    override fun getItemCount(): Int = listSong.size
+    fun updateData(list: MutableList<Song>) {
         listSong.run {
             clear()
             addAll(list)
