@@ -8,24 +8,25 @@ import com.example.music.R
 import com.example.music.data.entity.Song
 import kotlinx.android.synthetic.main.row_song.view.*
 
-class SongAdapter(val callback: Callback) :
-    RecyclerView.Adapter<SongAdapter.ViewHolder>() {
+class SongAdapter(
+    private val onClickItem: (id: Int) -> Unit
+) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
 
-    private val listSong = mutableListOf<Song>()
+    private val songs = mutableListOf<Song>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.row_song, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(view, onClickItem)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindView(Song(listSong[position].id, listSong[position].title))
+        holder.bindView(songs[position])
     }
 
-    override fun getItemCount(): Int = listSong.size
+    override fun getItemCount(): Int = songs.size
 
     fun updateData(list: MutableList<Song>) {
-        listSong.run {
+        songs.run {
             clear()
             addAll(list)
             notifyDataSetChanged()
@@ -33,18 +34,18 @@ class SongAdapter(val callback: Callback) :
 
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View, private var onClickItem: (id: Int) -> Unit) :
+        RecyclerView.ViewHolder(view) {
+        init {
+            view.setOnClickListener {
+                onClickItem(songs[adapterPosition].id)
+            }
+        }
 
         fun bindView(song: Song) {
-            itemView.title.text = song.title
-            itemView.id = song.id
-            itemView.title.setOnClickListener {
-                callback.onClick(itemView.id)
+            itemView.apply {
+                title.text = song.title
             }
         }
     }
-}
-
-interface Callback {
-    fun onClick(id: Int)
 }

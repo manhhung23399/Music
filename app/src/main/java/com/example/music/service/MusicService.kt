@@ -7,9 +7,11 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Binder
 import android.os.IBinder
 
 class MusicService : Service() {
+
     private var binder = Binder()
     private var mediaPlayer = MediaPlayer()
     override fun onCreate() {
@@ -39,7 +41,7 @@ class MusicService : Service() {
         mediaPlayer.start()
     }
 
-    inner class Binder : android.os.Binder() {
+    inner class MusicServiceBinder : Binder() {
         fun getService(): MusicService = this@MusicService
     }
 

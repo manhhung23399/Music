@@ -15,20 +15,21 @@ import com.example.music.data.entity.Song
 import com.example.music.data.repository.SongRepository
 import com.example.music.data.source.local.SongsLocalDataSource
 import com.example.music.service.MusicService
-import com.example.music.ui.Callback
 import com.example.music.ui.MainContract
 import com.example.music.ui.MainPresenter
 import com.example.music.ui.SongAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity(), MainContract.View, Callback {
+class MainActivity : AppCompatActivity(), MainContract.View {
+
     private var mainPresenter: MainPresenter? = null
     private var musicService: MusicService? = null
     private var isBound = false
+    private val songAdapter = SongAdapter(onClickItem = { id -> onClickItem(id) })
     private val connect: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as MusicService.Binder
+            val binder = service as MusicService.MusicServiceBinder
             musicService = binder.getService()
             isBound = true
         }
@@ -86,7 +87,6 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
     }
 
     override fun showListSong(list: MutableList<Song>) {
-        val songAdapter = SongAdapter(this)
         songAdapter.updateData(list)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = songAdapter
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
         Toast.makeText(this, exception.toString(), Toast.LENGTH_SHORT).show()
     }
 
-    override fun onClick(id: Int) {
+    private fun onClickItem(id: Int) {
         musicService?.playMusic(id.toLong())
     }
 
