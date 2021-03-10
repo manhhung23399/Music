@@ -12,11 +12,6 @@ import android.os.IBinder
 class MusicService : Service() {
     private var binder = Binder()
     private var mediaPlayer = MediaPlayer()
-
-    inner class Binder : android.os.Binder() {
-        fun getService(): MusicService = this@MusicService
-    }
-
     override fun onCreate() {
         super.onCreate()
         binder = Binder()
@@ -46,5 +41,9 @@ class MusicService : Service() {
 
     companion object {
         fun getIntent(context: Context) = Intent(context, MusicService::class.java)
+    }
+
+    inner class Binder : android.os.Binder() {
+        fun getService(): MusicService = this@MusicService
     }
 }

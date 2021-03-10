@@ -9,6 +9,7 @@ class SongAsynTask(
     private val songHandler: SongHandler,
     private val callback: OnSongLoadedCallback
 ) : AsyncTask<Void, Void, MutableList<Song>>() {
+
     private var exception: Exception? = null
     override fun doInBackground(vararg params: Void?): MutableList<Song>? {
         return try {

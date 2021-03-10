@@ -11,7 +11,6 @@ import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.music.data.entity.Song
 import com.example.music.data.repository.SongRepository
 import com.example.music.data.source.local.SongsLocalDataSource
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity(), MainContract.View, Callback {
-    private val REQUEST_CODE = 1
     private var mainPresenter: MainPresenter? = null
     private var musicService: MusicService? = null
     private var isBound = false
@@ -52,8 +50,11 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
         setContentView(R.layout.activity_main)
         checkPremission()
         mainPresenter =
-            MainPresenter(this, SongRepository(SongsLocalDataSource(this.contentResolver)))
-        mainPresenter?.getSongList()
+            MainPresenter(
+                this,
+                SongRepository.getInstance(SongsLocalDataSource.getInstance(contentResolver))
+            )
+        mainPresenter?.getSongs()
     }
 
     private fun checkPremission() {
@@ -84,15 +85,14 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
         }
     }
 
-    override fun showListSongSuccess(list: MutableList<Song>) {
-        val songAdapter = SongAdapter(list, this)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+    override fun showListSong(list: MutableList<Song>) {
+        val songAdapter = SongAdapter(this)
+        songAdapter.updateData(list)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = songAdapter
-        songAdapter.notifyDataSetChanged()
     }
 
-    override fun showListSongErorr(exception: Exception) {
+    override fun showListSong(exception: Exception) {
         Toast.makeText(this, exception.toString(), Toast.LENGTH_SHORT).show()
     }
 
@@ -100,5 +100,7 @@ class MainActivity : AppCompatActivity(), MainContract.View, Callback {
         musicService?.playMusic(id.toLong())
     }
 
-
+    companion object {
+        private const val REQUEST_CODE = 1
+    }
 }

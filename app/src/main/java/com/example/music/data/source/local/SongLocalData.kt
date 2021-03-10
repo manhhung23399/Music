@@ -9,11 +9,9 @@ class SongLocalData(private val resolver: ContentResolver) : SongHandler {
         val listSongs = mutableListOf<Song>()
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val cursor = resolver.query(uri, null, null, null, null)
-        if (cursor != null) {
-            val id = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
-            val title = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-            while (cursor.moveToNext()) {
-                listSongs.add(Song(cursor.getInt(id), cursor.getString(title)))
+        cursor?.let {
+            while (it.moveToNext()) {
+                listSongs.add(Song(cursor))
             }
         }
         return listSongs

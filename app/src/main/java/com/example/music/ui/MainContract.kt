@@ -5,11 +5,11 @@ import java.lang.Exception
 
 interface MainContract {
     interface View {
-        fun showListSongSuccess(list: MutableList<Song>)
-        fun showListSongErorr(exception: Exception)
+        fun showListSong(list: MutableList<Song>)
+        fun showListSong(exception: Exception)
     }
 
     interface Presenter {
-        fun getSongList()
+        fun getSongs()
     }
 }

@@ -3,14 +3,14 @@ package com.example.music.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.music.R
 import com.example.music.data.entity.Song
 import kotlinx.android.synthetic.main.row_song.view.*
 
-class SongAdapter(private val listSong: MutableList<Song>, val callback: Callback) :
+class SongAdapter(val callback: Callback) :
     RecyclerView.Adapter<SongAdapter.ViewHolder>() {
+    private var listSong = mutableListOf<Song>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.row_song, parent, false)
@@ -24,15 +24,22 @@ class SongAdapter(private val listSong: MutableList<Song>, val callback: Callbac
     override fun getItemCount(): Int {
         return listSong.size
     }
+    fun updateData(list:MutableList<Song>){
+        listSong.run {
+            clear()
+            addAll(list)
+            notifyDataSetChanged()
+        }
+
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var title: TextView = view.title
-        var id: Int = view.id
+
         fun bindView(song: Song) {
-            title.text = song.title
-            id = song.id
-            title.setOnClickListener {
-                callback.onClick(id)
+            itemView.title.text = song.title
+            itemView.id = song.id
+            itemView.title.setOnClickListener {
+                callback.onClick(itemView.id)
             }
         }
     }
@@ -41,5 +48,3 @@ class SongAdapter(private val listSong: MutableList<Song>, val callback: Callbac
 interface Callback {
     fun onClick(id: Int)
 }
-
-
