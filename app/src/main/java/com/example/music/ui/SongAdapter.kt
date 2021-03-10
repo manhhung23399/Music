@@ -23,6 +23,7 @@ class SongAdapter(val callback: Callback) :
     }
 
     override fun getItemCount(): Int = listSong.size
+
     fun updateData(list: MutableList<Song>) {
         listSong.run {
             clear()

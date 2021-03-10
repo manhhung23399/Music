@@ -8,10 +8,10 @@ import java.lang.Exception
 class SongAsynTask(
     private val songHandler: SongHandler,
     private val callback: OnSongLoadedCallback
-) : AsyncTask<Void, Void, MutableList<Song>>() {
+) : AsyncTask<Unit, Unit, MutableList<Song>>() {
 
     private var exception: Exception? = null
-    override fun doInBackground(vararg params: Void?): MutableList<Song>? {
+    override fun doInBackground(vararg params: Unit): MutableList<Song>? {
         return try {
             songHandler.getSongs()
         } catch (exception: Exception) {
