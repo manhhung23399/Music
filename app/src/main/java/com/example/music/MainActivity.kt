@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private var isBound = false
     private val songAdapter = SongAdapter(onClickItem = { id -> onClickItem(id) })
     private val connect: ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder) {
             val binder = service as MusicService.MusicServiceBinder
             musicService = binder.getService()
             isBound = true

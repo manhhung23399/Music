@@ -12,12 +12,8 @@ import android.os.IBinder
 
 class MusicService : Service() {
 
-    private var binder = Binder()
+    private var binder = MusicServiceBinder()
     private var mediaPlayer = MediaPlayer()
-    override fun onCreate() {
-        super.onCreate()
-        binder = Binder()
-    }
 
     override fun onBind(intent: Intent?): IBinder = binder
     fun playMusic(position: Long) {
